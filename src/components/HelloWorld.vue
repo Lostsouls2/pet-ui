@@ -27,6 +27,14 @@
       <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
       <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
     </ul>
+    <v-button type="primary">Primary</v-button>
+    <v-button>Default</v-button>
+    <v-button type="dashed">Dashed</v-button>
+    <v-button type="danger">Danger</v-button>
+    <v-button type="info">Info</v-button>
+    <v-button type="success">Success</v-button>
+    <v-button type="warning">Warning</v-button>
+    <v-button type="error">Error</v-button>
   </div>
 </template>
 
