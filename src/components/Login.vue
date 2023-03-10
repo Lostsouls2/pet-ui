@@ -5,15 +5,15 @@
     </div>
     <div style="background-color: #42b983;width: 50%;height: 100%;float: left;">
       <v-form direction="horizontal" :model="customForm" :rules="customRules" ref="customRuleForm">
-        <v-form-item label="用户名" :label-col="labelCol" :wrapper-col="wrapperCol" prop="pass" has-feedback>
-          <v-input type="text" size="large" v-model="customForm.pass"></v-input>
+        <v-form-item label="账户" :label-col="labelCol" :wrapper-col="wrapperCol" prop="username" has-feedback>
+          <v-input type="text" size="large" v-model="customForm.username"></v-input>
         </v-form-item>
-        <v-form-item label="密码" :label-col="labelCol" :wrapper-col="wrapperCol" prop="checkPass" has-feedback>
-          <v-input type="password" size="large" v-model="customForm.checkPass"></v-input>
+        <v-form-item label="密码" :label-col="labelCol" :wrapper-col="wrapperCol" prop="password" has-feedback>
+          <v-input type="password" size="large" v-model="customForm.password"></v-input>
         </v-form-item>
         <v-form-item :wrapper-col="{offset:6, span: 14 }">
           <v-button type="primary" style="margin-right:10px" @click.prevent="submitForm('customRuleForm')">提交</v-button>
-          <v-button type="ghost" @click.prevent="resetForm('customRuleForm')">重置</v-button>
+<!--          <v-button type="ghost" @click.prevent="resetForm('customRuleForm')">重置</v-button>-->
         </v-form-item>
       </v-form>
     </div>
@@ -24,32 +24,17 @@
 export default {
   name: 'Login',
   data() {
-    // var checkAge = (rule, value, callback) => {
-    //   var age = parseInt(value, 10);
-    //
-    //   setTimeout(() => {
-    //     if (!Number.isInteger(age)) {
-    //       callback(new Error('请输入数字值'));
-    //     } else {
-    //       if (age < 18) {
-    //         callback(new Error('必须年满18岁'));
-    //       } else {
-    //         callback();
-    //       }
-    //     }
-    //   }, 1000);
-    // };
-    var validatePass = (rule, value, callback) => {
+    var validateName = (rule, value, callback) => {
       if (value === '') {
-        callback(new Error('请输入密码'));
+        callback(new Error('请输入账户'));
       } else {
-        if (this.customForm.checkPass !== '') {
-          this.$refs.customRuleForm.validateField('checkPass');
-        }
+        // if (this.customForm.checkPass !== '') {
+        //   this.$refs.customRuleForm.validateField('checkPass');
+        // }
         callback();
       }
     };
-    var validatePass2 = (rule, value, callback) => {
+    var validatePass = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('请再次输入密码'));
       } else if (value !== this.customForm.pass) {
@@ -60,24 +45,24 @@ export default {
     };
     return {
       customForm: {
-        pass: '',
-        checkPass: ''
+        username: '',
+        password: ''
       },
       customRules: {
-        pass: [{
+        username: [{
+          required: true,
+          message: '请输入账户'
+        },
+          {
+            validator: validateName
+          }
+        ],
+        password: [{
           required: true,
           message: '请输入密码'
         },
           {
             validator: validatePass
-          }
-        ],
-        checkPass: [{
-          required: true,
-          message: '请再次输入密码'
-        },
-          {
-            validator: validatePass2
           }
         ]
       },
