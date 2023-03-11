@@ -2,17 +2,8 @@
   <div>
     <v-more-panel>
       <v-form slot="form">
-        <v-form-item label="账号">
-          <v-input placeholder="请输入账号"></v-input>
-        </v-form-item>
-        <v-form-item label="密码">
-          <v-input type="password" placeholder="请输入密码"></v-input>
-        </v-form-item>
-        <v-form-item label="手机">
-          <v-input placeholder="请输入手机"></v-input>
-        </v-form-item>
-        <v-form-item label="邮箱">
-          <v-input placeholder="请输入邮箱"></v-input>
+        <v-form-item label="角色">
+          <v-input placeholder="请输入管理员名称"></v-input>
         </v-form-item>
         <v-form-item label="状态">
           <v-select placeholder="请选择状态" style="width: 160px;" notfound="无法找到" :data="[{value: '1', label: '启用'}, {value: '2', label: '停用'}]"></v-select>
@@ -35,12 +26,9 @@
     </div>
     <v-modal :title="modelTitle" :visible="customFooterVisible" @cancel="customFooterCancel">
       <v-form direction="horizontal" :model="customForm" :rules="customRules" ref="customRuleForm">
-        <v-form-item label="账号" :label-col="labelCol" :wrapper-col="wrapperCol" prop="account" has-feedback>
+        <v-form-item label="角色" :label-col="labelCol" :wrapper-col="wrapperCol" prop="account" has-feedback>
           <v-input size="large" v-model="customForm.account"></v-input>
         </v-form-item>
-<!--        <v-form-item label="密码" :label-col="labelCol" :wrapper-col="wrapperCol" prop="password" has-feedback>-->
-<!--          <v-input type="password" size="large" v-model="customForm.password"></v-input>-->
-<!--        </v-form-item>-->
         <v-form-item label="手机" :label-col="labelCol" :wrapper-col="wrapperCol" prop="phone" has-feedback>
           <v-input size="large" v-model="customForm.phone"></v-input>
         </v-form-item>
@@ -48,17 +36,13 @@
           <v-input size="large" v-model="customForm.mailbox"></v-input>
         </v-form-item>
         <v-form-item label="状态" :label-col="labelCol" :wrapper-col="wrapperCol" prop="state">
-<!--          <v-input size="large" v-model="customForm.state"></v-input>-->
+          <!--          <v-input size="large" v-model="customForm.state"></v-input>-->
           <v-select v-model="customForm.state" placeholder="请选择状态" notfound="无法找到" :data="[{value: '1', label: '区域1'}, {value: '2', label: '区域2'}]"></v-select>
         </v-form-item>
         <v-form-item label="权限" :label-col="labelCol" :wrapper-col="wrapperCol" prop="power">
-<!--          <v-input size="large" v-model="customForm.power"></v-input>-->
+          <!--          <v-input size="large" v-model="customForm.power"></v-input>-->
           <v-select v-model="customForm.power" placeholder="请选择管理员" notfound="无法找到" :data="[{value: '1', label: '区域1'}, {value: '2', label: '区域2'}]"></v-select>
         </v-form-item>
-<!--        <v-form-item :wrapper-col="{offset:6, span: 14 }">-->
-<!--          <v-button type="primary" style="margin-right:10px" @click.prevent="submitForm('customRuleForm')">提交</v-button>-->
-<!--          <v-button type="ghost" @click.prevent="resetForm('customRuleForm')">重置</v-button>-->
-<!--        </v-form-item>-->
       </v-form>
       <div slot="footer">
         <v-button key="cancel" type="ghost" size="large" @click="customFooterCancel('customRuleForm')">
@@ -74,9 +58,8 @@
 
 <script>
 import axios from 'axios'
-
 export default {
-  name: 'Account',
+  name: 'Role',
   data: function () {
     let validateAccount = (rule, value, callback) => {
       if (value === '') {
@@ -147,10 +130,10 @@ export default {
         });
       },
       columns:[
-        {title:"账号",field:'account',width:'16.6%'},
-        {title:"手机",field:'phone',width:'16.6%'},
-        {title:"邮箱",field:'mailbox',width:'16.6%'},
+        {title:"角色",field:'account',width:'16.6%'},
         {title:"状态",field:'state',width:'16.6%'},
+        {title:"创建人",field:'phone',width:'16.6%'},
+        {title:"创建时间",field:'mailbox',width:'16.6%'},
         {title:"权限",field:'power',width:'16.6%'},
         {title:"操作",field:'action',width:'16.6%'}
       ],
@@ -222,7 +205,6 @@ export default {
     }
   },
   methods:{
-    // 编辑
     edit: function (obj){
       this.customFooterVisible = true
       this.modelTitle = '编辑'

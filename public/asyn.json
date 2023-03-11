@@ -1,0 +1,26 @@
+{
+  "result": [
+    {
+      "id": 1,
+      "pid": 0,
+      "menuName": "首页",
+      "add": null,
+      "isparent":true
+    },
+    {
+      "id": 2,
+      "pid": 0,
+      "menuName": " 基础数据",
+      "isparent":true
+    },
+    {
+      "id": 3,
+      "pid": 0,
+      "menuName": "系统设置",
+      "isparent":true
+    }
+  ],
+  "totalCount":3,
+  "pageSize":10,
+  "pageNo":1
+}

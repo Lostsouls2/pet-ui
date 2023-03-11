@@ -4,7 +4,7 @@
       <v-layout>
         <v-sider collapsible :collapsed="customCollapsed" :trigger="false" :collapsed-width="64">
           <div class="logo"></div>
-          <v-menu theme="dark" mode="inline" :data="menuData4">
+          <v-menu theme="dark" mode="inline" :data="menuData4" @item-click="itemclick($event)">
             <template slot-scope="{data}">
               <i v-if="data.icon" :class="'anticon anticon-' + data.icon"></i>
               <span class="nav-text">{{data.name}}</span>
@@ -21,7 +21,10 @@
 <!--              <v-breadcrumb-item href="">List</v-breadcrumb-item>-->
 <!--              <v-breadcrumb-item href="">App</v-breadcrumb-item>-->
             </v-breadcrumb>
-            <div style="padding: 24px; background: #fff; min-height: 360px;height: 100%">Content</div>
+            <div style="padding: 24px; background: #fff; min-height: 360px;height: 100%">
+              <components :is="page"></components>
+
+            </div>
           </v-content>
           <v-footer :style="{ textAlign: 'center' }">
             Ant Design ©2016 Created by Ant UED
@@ -33,10 +36,15 @@
 </template>
 
 <script>
+import Account from "@/components/Account";
+import Role from "@/components/Role";
+import Menu from "@/components/Menu";
 export default {
   name: 'Show',
+  components: {Role, Account, Menu},
   data() {
     return {
+      page: Account,
       customCollapsed: false,
       menuData4: [{
         name: '首页',
@@ -53,21 +61,35 @@ export default {
         name: '基础数据',
         icon: 'video-camera',
         children: [{
-          name: '用户信息'
+          name: '用户信息',
+          url: 'Account'
+        },{
+          name: '管理员信息',
+          url: 'Role'
+        },{
+          name: 'Alex'
+        }]
+      },{
+        name: '系统设置',
+        icon: 'appstore-o',
+        children: [{
+          name: '菜单设置',
+          url: 'Menu'
         },{
           name: '管理员信息'
         },{
           name: 'Alex'
         }]
-      },{
-        name: 'nav 3',
-        icon: 'upload'
       }]
     }
   },
   methods: {
     toggle() {
       this.customCollapsed = !this.customCollapsed;
+    },
+    itemclick(menuName){
+      // console.log(menuName)
+      this.page = menuName[1].url
     }
   }
 }
