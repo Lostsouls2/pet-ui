@@ -1,0 +1,19 @@
+{
+  "result": [
+    {
+      "role": "超级管理员",
+      "createName": "125241515",
+      "createData": "12313@163.com",
+      "state": 0
+    },
+    {
+      "role": "test",
+      "createName": "222222",
+      "createData": "133@163.com",
+      "state": 0
+    }
+  ],
+  "totalCount": 2,
+  "pageSize": 10,
+  "pageNo": 1
+}

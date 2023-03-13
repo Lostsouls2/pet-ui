@@ -6,7 +6,7 @@
           <v-input placeholder="请输入菜单名称"></v-input>
         </v-form-item>
         <v-form-item label="状态">
-          <v-select placeholder="请选择状态" style="width: 160px;" notfound="无法找到" :data="[{value: '1', label: '启用'}, {value: '2', label: '停用'}]"></v-select>
+          <v-select placeholder="请选择状态" style="width: 160px;" :data="selectDic"></v-select>
         </v-form-item>
       </v-form>
       <v-button slot="control" type="primary" html-type="button" icon="search">查询</v-button>
@@ -15,17 +15,20 @@
     </v-more-panel>
     <v-data-table :data='loadData' :columns='columns' tree-table :tree-option='treeOption'>
       <template slot="td" slot-scope="props">
-        <div v-if="props.column.field ==='action' && props.item.pid !== 0">
+        <div v-if="props.column.field !=='menuName' && props.column.field !=='action'">
+          <div v-if="props.content === 0">
+            <v-badge status="success"></v-badge>
+          </div>
+          <div v-else-if="props.content === 1">
+            <v-badge status="error"></v-badge>
+          </div>
+        </div>
+        <div v-else-if="props.column.field ==='action' && props.item.pid !== 0">
           <v-button type="primary" shape="circle" icon="edit" @click="edit(props.item)"></v-button>
           <span style="margin: 1px"></span>
           <v-button type="error" shape="circle" icon="close"></v-button>
         </div>
-<!--        <div v-if="props.column.field ==='add'">-->
-<!--          <div v-if="props.content === 0">-->
-<!--            <v-button type="error">禁用</v-button>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--        <span v-else v-html="props.content"></span>-->
+        <span v-else v-html="props.content"></span>
       </template>
     </v-data-table>
     <v-modal :title="modelTitle" :visible="systemFooterVisible" @cancel="systemFooterCancel">
@@ -34,19 +37,19 @@
           <v-input size="large" v-model="systemForm.menuName"></v-input>
         </v-form-item>
         <v-form-item label="添加" :label-col="labelCol" :wrapper-col="wrapperCol" prop="add" >
-          <v-radio-group v-model="systemForm.add" :data="[{value: '1', text: '线上品牌商赞助'},{value: '2', text: '线下场地免费'}]"></v-radio-group>
+          <v-radio-group v-model="systemForm.add" :data="stateDic"></v-radio-group>
         </v-form-item>
         <v-form-item label="编辑" :label-col="labelCol" :wrapper-col="wrapperCol" prop="edit" >
-          <v-radio-group v-model="systemForm.edit" :data="[{value: '1', text: '线上品牌商赞助'},{value: '2', text: '线下场地免费'}]"></v-radio-group>
+          <v-radio-group v-model="systemForm.edit" :data="stateDic"></v-radio-group>
         </v-form-item>
         <v-form-item label="删除" :label-col="labelCol" :wrapper-col="wrapperCol" prop="del">
-          <v-radio-group v-model="systemForm.del" :data="[{value: '1', text: '线上品牌商赞助'},{value: '2', text: '线下场地免费'}]"></v-radio-group>
+          <v-radio-group v-model="systemForm.del" :data="stateDic"></v-radio-group>
         </v-form-item>
         <v-form-item label="其他" :label-col="labelCol" :wrapper-col="wrapperCol" prop="other">
-          <v-radio-group v-model="systemForm.other" :data="[{value: '1', text: '线上品牌商赞助'},{value: '2', text: '线下场地免费'}]"></v-radio-group>
+          <v-radio-group v-model="systemForm.other" :data="stateDic"></v-radio-group>
         </v-form-item>
         <v-form-item label="状态" :label-col="labelCol" :wrapper-col="wrapperCol" prop="state">
-          <v-radio-group v-model="systemForm.state" :data="[{value: '1', text: '线上品牌商赞助'},{value: '2', text: '线下场地免费'}]"></v-radio-group>
+          <v-radio-group v-model="systemForm.state" :data="stateDic"></v-radio-group>
         </v-form-item>
       </v-form>
       <div slot="footer">
@@ -74,34 +77,6 @@ export default {
         callback();
       }
     };
-    // let validateAdd = (rule, value, callback) => {
-    //   if (value === '') {
-    //     callback(new Error('请选择状态'));
-    //   } else {
-    //     callback();
-    //   }
-    // };
-    // let validateEdit = (rule, value, callback) => {
-    //   if (value === '') {
-    //     callback(new Error('请选择状态'));
-    //   } else {
-    //     callback();
-    //   }
-    // };
-    // let validateDel = (rule, value, callback) => {
-    //   if (value === '') {
-    //     callback(new Error('请选择状态'));
-    //   } else {
-    //     callback();
-    //   }
-    // };
-    // let validateOther = (rule, value, callback) => {
-    //   if (value === '') {
-    //     callback(new Error('请选择状态'));
-    //   } else {
-    //     callback();
-    //   }
-    // };
     let validateState = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('请选择状态'));
@@ -142,6 +117,8 @@ export default {
         other: '',
         state: ''
       },
+      stateDic: [{value: 0, text: '启用'},{value: 1, text: '停用'}],
+      selectDic: [{value: 0, label: '启用'}, {value: 1, label: '停用'}],
       systemFooterVisible: false,
       systemFooterLoading: false,
       systemRules: {
@@ -228,21 +205,26 @@ export default {
     edit: function (obj){
       this.systemFooterVisible = true
       this.modelTitle = '编辑'
-      // this.customForm.account = obj.account
-      // // this.customForm.password = obj.password
-      // this.customForm.phone = obj.phone
-      // this.customForm.mailbox = obj.mailbox
-      // this.customForm.state = '1'
-      // this.customForm.power = obj.power
+      this.systemForm.menuName = obj.menuName
+      this.systemForm.add = obj.add
+      this.systemForm.edit = obj.edit
+      this.systemForm.del = obj.del
+      this.systemForm.other = obj.other
+      this.systemForm.state = obj.state
     },
     add(){
       this.systemFooterVisible = true
       this.modelTitle = '新增'
+      for(let key in this.systemForm){
+        delete this.systemForm[key];
+      }
     }
   }
 }
 </script>
 
 <style scoped>
-
+.drop {
+  background: chartreuse;
+}
 </style>

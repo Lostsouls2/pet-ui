@@ -51,11 +51,8 @@ export default {
         icon: 'user',
         selected: true,
         children: [{
-          name: 'Tome'
-        },{
-          name: 'Bill'
-        },{
-          name: 'Alex'
+          name: '用户统计',
+          url: ''
         }]
       },{
         name: '基础数据',
@@ -66,8 +63,6 @@ export default {
         },{
           name: '管理员信息',
           url: 'Role'
-        },{
-          name: 'Alex'
         }]
       },{
         name: '系统设置',
@@ -75,10 +70,6 @@ export default {
         children: [{
           name: '菜单设置',
           url: 'Menu'
-        },{
-          name: '管理员信息'
-        },{
-          name: 'Alex'
         }]
       }]
     }

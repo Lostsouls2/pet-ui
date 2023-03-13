@@ -1,33 +1,46 @@
 <template>
-  <v-form direction="horizontal" :model="customForm" :rules="customRules" ref="customRuleForm">
-    <v-form-item label="密码" :label-col="labelCol" :wrapper-col="wrapperCol" prop="pass" has-feedback>
-      <v-input type="password" size="large" v-model="customForm.pass"></v-input>
-    </v-form-item>
-    <v-form-item label="确认密码" :label-col="labelCol" :wrapper-col="wrapperCol" prop="checkPass" has-feedback>
-      <v-input type="password" size="large" v-model="customForm.checkPass"></v-input>
-    </v-form-item>
-    <v-form-item label="年龄" :label-col="labelCol" :wrapper-col="wrapperCol" prop="age" has-feedback>
-      <v-input size="large" v-model="customForm.age"></v-input>
-    </v-form-item>
-    <v-form-item label="年龄" :label-col="labelCol" :wrapper-col="wrapperCol" prop="age1">
-<!--      <v-input size="large" v-model="customForm.age1"></v-input>-->
-      <v-select v-model="customForm.age1" placeholder="请选择状态" notfound="无法找到" :data="[{value: '1', label: '区域1'}, {value: '2', label: '区域2'}]"></v-select>
-    </v-form-item>
-    <v-form-item label="年龄" :label-col="labelCol" :wrapper-col="wrapperCol" prop="age2">
-<!--      <v-input size="large" v-model="customForm.age2"></v-input>-->
-      <v-select v-model="customForm.age2" placeholder="请选择状态" notfound="无法找到" :data="[{value: '1', label: '区域1'}, {value: '2', label: '区域2'}]"></v-select>
-    </v-form-item>
-    <v-form-item label="年龄" :label-col="labelCol" :wrapper-col="wrapperCol" prop="age3" has-feedback>
-      <v-input size="large" v-model="customForm.age3"></v-input>
-    </v-form-item>
-    <v-form-item label="密码" :label-col="labelCol" :wrapper-col="wrapperCol" prop="account" has-feedback>
-      <v-input size="large" v-model="customForm.account"></v-input>
-    </v-form-item>
-    <v-form-item :wrapper-col="{offset:6, span: 14 }">
-      <v-button type="primary" style="margin-right:10px" @click.prevent="submitForm('customRuleForm')">提交</v-button>
-      <v-button type="ghost" @click.prevent="resetForm('customRuleForm')">重置</v-button>
-    </v-form-item>
-  </v-form>
+  <div>
+    <v-form direction="horizontal" :model="customForm" :rules="customRules" ref="customRuleForm">
+      <v-form-item label="密码" :label-col="labelCol" :wrapper-col="wrapperCol" prop="pass" has-feedback>
+        <v-input type="password" size="large" v-model="customForm.pass"></v-input>
+      </v-form-item>
+      <v-form-item label="确认密码" :label-col="labelCol" :wrapper-col="wrapperCol" prop="checkPass" has-feedback>
+        <v-input type="password" size="large" v-model="customForm.checkPass"></v-input>
+      </v-form-item>
+      <v-form-item label="年龄" :label-col="labelCol" :wrapper-col="wrapperCol" prop="age" has-feedback>
+        <v-input size="large" v-model="customForm.age"></v-input>
+      </v-form-item>
+      <v-form-item label="年龄" :label-col="labelCol" :wrapper-col="wrapperCol" prop="age1">
+        <!--      <v-input size="large" v-model="customForm.age1"></v-input>-->
+        <v-select v-model="customForm.age1" placeholder="请选择状态" notfound="无法找到" :data="[{value: '1', label: '区域1'}, {value: '2', label: '区域2'}]"></v-select>
+      </v-form-item>
+      <v-form-item label="年龄" :label-col="labelCol" :wrapper-col="wrapperCol" prop="age2">
+        <!--      <v-input size="large" v-model="customForm.age2"></v-input>-->
+        <v-select v-model="customForm.age2" placeholder="请选择状态" notfound="无法找到" :data="[{value: '1', label: '区域1'}, {value: '2', label: '区域2'}]"></v-select>
+      </v-form-item>
+      <v-form-item label="年龄" :label-col="labelCol" :wrapper-col="wrapperCol" prop="age3" has-feedback>
+        <v-input size="large" v-model="customForm.age3"></v-input>
+      </v-form-item>
+      <v-form-item label="密码" :label-col="labelCol" :wrapper-col="wrapperCol" prop="account" has-feedback>
+        <v-input size="large" v-model="customForm.account"></v-input>
+      </v-form-item>
+      <v-form-item :wrapper-col="{offset:6, span: 14 }">
+        <v-button type="primary" style="margin-right:10px" @click.prevent="submitForm('customRuleForm')">提交</v-button>
+        <v-button type="ghost" @click.prevent="resetForm('customRuleForm')">重置</v-button>
+      </v-form-item>
+    </v-form>
+
+    <div>
+      <div>
+        <p>
+          <v-checkbox :indeterminate="indeterminate" v-model="allChecked" @click="checkAll">全选</v-checkbox>
+        </p>
+        <p style="margin-bottom: 16px;">
+          <v-checkbox-group :data="options" v-model="fruits" @change="setState"></v-checkbox-group>
+        </p>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -187,10 +200,35 @@ export default {
       },
       wrapperCol: {
         span: 14
-      }
+      },
+      indeterminate: false,
+      allChecked: true,
+      fruits: [],
+      options: [
+        {label: '苹果', value: 'Apple'},
+        {label: '梨', value: 'Pear'},
+        {label: '橘', value: 'Orange'},
+      ],
+      allFruits: ['Apple', 'Pear', 'Orange']
     }
   },
   methods: {
+    checkAll() {
+      console.log(this.fruits)
+      if (this.fruits.length == this.options.length) {
+        this.fruits = [];
+        this.allChecked = false;
+        this.indeterminate = false;
+      } else {
+        this.fruits = JSON.parse(JSON.stringify(this.allFruits));
+        this.allChecked = false;
+        this.indeterminate = false;
+      }
+    },
+    setState() {
+      this.indeterminate =  this.fruits.length > 0 && this.fruits.length < this.options.length;
+      this.allChecked = this.fruits.length == this.options.length;
+    },
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
