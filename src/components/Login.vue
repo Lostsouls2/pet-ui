@@ -4,6 +4,19 @@
       <img src="../assets/logo.png">
     </div>
     <div style="background-color: #42b983;width: 50%;height: 100%;float: left;">
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
       <v-form direction="horizontal" :model="customForm" :rules="customRules" ref="customRuleForm">
         <v-form-item label="账户" :label-col="labelCol" :wrapper-col="wrapperCol" prop="username" has-feedback>
           <v-input type="text" size="large" v-model="customForm.username"></v-input>
@@ -11,7 +24,7 @@
         <v-form-item label="密码" :label-col="labelCol" :wrapper-col="wrapperCol" prop="password" has-feedback>
           <v-input type="password" size="large" v-model="customForm.password"></v-input>
         </v-form-item>
-        <v-form-item :wrapper-col="{offset:6, span: 14 }">
+        <v-form-item :wrapper-col="{offset:10, span: 14 }">
           <v-button type="primary" style="margin-right:10px" @click.prevent="submitForm('customRuleForm')">提交</v-button>
 <!--          <v-button type="ghost" @click.prevent="resetForm('customRuleForm')">重置</v-button>-->
         </v-form-item>

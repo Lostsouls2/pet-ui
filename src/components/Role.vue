@@ -42,7 +42,6 @@
           <v-select v-model="customForm.state" placeholder="请选择状态" notfound="无法找到" :data="selectDic"></v-select>
         </v-form-item>
         <v-form-item label="菜单权限" :label-col="labelCol" :wrapper-col="wrapperCol" prop="power">
-<!--          <v-select v-model="customForm.power" placeholder="请选择管理员" notfound="无法找到" :data="[{value: '1', label: '区域1'}, {value: '2', label: '区域2'}]"></v-select>-->
           <div>
             <p>
               <v-checkbox :indeterminate="indeterminate" v-model="allChecked" @click="checkAll">全选</v-checkbox>
@@ -241,15 +240,50 @@ export default {
       this.modelTitle = '新增'
     },
     checkAll() {
-      // if (this.fruits.length == this.options.length) {
-      //   this.fruits = [];
-      //   this.allChecked = false;
-      //   this.indeterminate = false;
-      // } else {
-      //   this.fruits = JSON.parse(JSON.stringify(this.allFruits));
-      //   this.allChecked = true;
-      //   this.indeterminate = false;
-      // }
+      if (this.UserFruits.length == this.options.length && this.AdminInfoFruits.length == this.options.length &&
+          this.MenuSetFruits.length == this.options.length){
+        this.UserFruits = []
+        this.AdminInfoFruits = []
+        this.MenuSetFruits = []
+        this.UserInfoFruits = []
+        this.indeterminate= false
+        this.indeterminateHome= false
+        this.indeterminateUser= false
+        this.indeterminateBasic= false
+        this.indeterminateUserInfo= false
+        this.indeterminateAdminInfo= false
+        this.indeterminateSys= false
+        this.indeterminateMenuSet= false
+        this.allChecked= false
+        this.allCheckedHome= false
+        this.allCheckedUser= false
+        this.allCheckedBasic= false
+        this.allCheckedUserInfo= false
+        this.allCheckedAdminInfo= false
+        this.allCheckedSys= false
+        this.allCheckedMenuSet= false
+      } else {
+        this.UserFruits = JSON.parse(JSON.stringify(this.allFruits))
+        this.AdminInfoFruits = JSON.parse(JSON.stringify(this.allFruits))
+        this.MenuSetFruits = JSON.parse(JSON.stringify(this.allFruits))
+        this.UserInfoFruits = JSON.parse(JSON.stringify(this.allFruits));
+        this.indeterminate= false
+        this.indeterminateHome= false
+        this.indeterminateUser= false
+        this.indeterminateBasic= false
+        this.indeterminateUserInfo= false
+        this.indeterminateAdminInfo= false
+        this.indeterminateSys= false
+        this.indeterminateMenuSet= false
+        this.allChecked= false
+        this.allCheckedHome= false
+        this.allCheckedUser= false
+        this.allCheckedBasic= false
+        this.allCheckedUserInfo= false
+        this.allCheckedAdminInfo= false
+        this.allCheckedSys= false
+        this.allCheckedMenuSet= false
+      }
     },
     checkHome() {
       if (this.UserFruits.length == this.options.length){
@@ -259,7 +293,7 @@ export default {
         this.allCheckedHome = false
         this.allCheckedUser = false
       } else {
-        this.UserFruits = JSON.parse(JSON.stringify(this.allFruits));
+        this.UserFruits = JSON.parse(JSON.stringify(this.allFruits))
         this.indeterminateHome = false
         this.indeterminateUser = false
         this.allCheckedHome = false
@@ -286,6 +320,7 @@ export default {
       this.indeterminateUser =  this.UserFruits.length > 0 && this.UserFruits.length < this.options.length
       this.allCheckedHome = this.UserFruits.length == this.options.length
       this.allCheckedUser = this.UserFruits.length == this.options.length
+      this.tick()
     },
     checkBasic() {
       if (this.UserInfoFruits.length == this.options.length && this.AdminInfoFruits.length == this.options.length){
@@ -326,10 +361,14 @@ export default {
       }
     },
     setStateUserInfo(){
-      this.indeterminateBasic =  this.UserInfoFruits.length > 0 && this.UserInfoFruits.length < this.options.length || this.AdminInfoFruits.length > 0 && this.AdminInfoFruits.length < this.options.length
+      this.indeterminateBasic =  this.UserInfoFruits.length > 0 && this.UserInfoFruits.length < this.options.length ||
+          this.AdminInfoFruits.length > 0 && this.AdminInfoFruits.length < this.options.length ||
+          (this.UserInfoFruits.length == 0 && this.AdminInfoFruits.length == this.options.length) ||
+          (this.AdminInfoFruits.length == 0 && this.UserInfoFruits.length == this.options.length)
       this.indeterminateUserInfo =  this.UserInfoFruits.length > 0 && this.UserInfoFruits.length < this.options.length
       this.allCheckedBasic = this.UserInfoFruits.length == this.options.length && this.AdminInfoFruits.length == this.options.length
       this.allCheckedUserInfo = this.UserInfoFruits.length == this.options.length
+      this.tick()
     },
     checkAdminInfo(){
       if (this.AdminInfoFruits.length == this.options.length){
@@ -347,10 +386,14 @@ export default {
       }
     },
     setStateAdminInfo(){
-      this.indeterminateBasic =  this.AdminInfoFruits.length > 0 && this.AdminInfoFruits.length < this.options.length || this.UserInfoFruits.length > 0 && this.UserInfoFruits.length < this.options.length
+      this.indeterminateBasic =  this.AdminInfoFruits.length > 0 && this.AdminInfoFruits.length < this.options.length ||
+          this.UserInfoFruits.length > 0 && this.UserInfoFruits.length < this.options.length ||
+          (this.UserInfoFruits.length == 0 && this.AdminInfoFruits.length == this.options.length) ||
+          (this.AdminInfoFruits.length == 0 && this.UserInfoFruits.length == this.options.length)
       this.indeterminateAdminInfo =  this.AdminInfoFruits.length > 0 && this.AdminInfoFruits.length < this.options.length
       this.allCheckedBasic = this.AdminInfoFruits.length == this.options.length && this.UserInfoFruits.length == this.options.length
       this.allCheckedAdminInfo = this.AdminInfoFruits.length == this.options.length
+      this.tick()
     },
     checkSys() {
       if (this.MenuSetFruits.length == this.options.length){
@@ -387,10 +430,15 @@ export default {
       this.indeterminateMenuSet =  this.MenuSetFruits.length > 0 && this.MenuSetFruits.length < this.options.length
       this.allCheckedSys = this.MenuSetFruits.length == this.options.length
       this.allCheckedMenuSet = this.MenuSetFruits.length == this.options.length
+      this.tick()
     },
-    setState() {
-      this.indeterminate =  this.fruits.length > 0 && this.fruits.length < this.options.length;
-      this.allChecked = this.fruits.length == this.options.length;
+    tick() {
+      this.allChecked = this.allCheckedHome && this.allCheckedUser && this.allCheckedBasic
+          && this.allCheckedUserInfo && this.allCheckedAdminInfo &&
+          this.allCheckedSys && this.allCheckedMenuSet
+      this.indeterminate = !this.allChecked && (this.allCheckedHome || this.allCheckedUser || this.allCheckedBasic
+          || this.allCheckedUserInfo || this.allCheckedAdminInfo ||
+          this.allCheckedSys || this.allCheckedMenuSet)
     }
   }
 }

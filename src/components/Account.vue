@@ -15,7 +15,7 @@
           <v-input placeholder="请输入邮箱"></v-input>
         </v-form-item>
         <v-form-item label="状态">
-          <v-select placeholder="请选择状态" style="width: 160px;" notfound="无法找到" :data="[{value: '1', label: '启用'}, {value: '2', label: '停用'}]"></v-select>
+          <v-select placeholder="请选择状态" style="width: 160px;" notfound="无法找到" :data="selectDic"></v-select>
         </v-form-item>
       </v-form>
       <v-button slot="control" type="primary" html-type="button" icon="search">查询</v-button>
@@ -25,6 +25,22 @@
     <div style='overflow: hidden;'>
       <v-data-table :data='loadData' :columns='columns'>
         <template slot="td" slot-scope="props">
+          <div v-if="props.column.field=='state'">
+            <div v-if="props.content === 0">
+              <v-badge status="success"></v-badge>
+            </div>
+            <div v-else-if="props.content === 1">
+              <v-badge status="error"></v-badge>
+            </div>
+          </div>
+          <div v-else-if="props.column.field=='power'">
+            <div v-for="(item,index) in powerDic">
+              <div v-if="props.content === powerDic[index].value">
+                <span>{{powerDic[index].label}}</span>
+              </div>
+            </div>
+          </div>
+          <span v-else v-html="props.content"></span>
           <div v-if="props.column.field=='action'">
             <v-button type="primary" shape="circle" icon="edit" @click="edit(props.item)"></v-button>
             <span style="margin: 1px"></span>
@@ -38,9 +54,6 @@
         <v-form-item label="账号" :label-col="labelCol" :wrapper-col="wrapperCol" prop="account" has-feedback>
           <v-input size="large" v-model="customForm.account"></v-input>
         </v-form-item>
-<!--        <v-form-item label="密码" :label-col="labelCol" :wrapper-col="wrapperCol" prop="password" has-feedback>-->
-<!--          <v-input type="password" size="large" v-model="customForm.password"></v-input>-->
-<!--        </v-form-item>-->
         <v-form-item label="手机" :label-col="labelCol" :wrapper-col="wrapperCol" prop="phone" has-feedback>
           <v-input size="large" v-model="customForm.phone"></v-input>
         </v-form-item>
@@ -48,17 +61,11 @@
           <v-input size="large" v-model="customForm.mailbox"></v-input>
         </v-form-item>
         <v-form-item label="状态" :label-col="labelCol" :wrapper-col="wrapperCol" prop="state">
-<!--          <v-input size="large" v-model="customForm.state"></v-input>-->
-          <v-select v-model="customForm.state" placeholder="请选择状态" notfound="无法找到" :data="[{value: '1', label: '区域1'}, {value: '2', label: '区域2'}]"></v-select>
+          <v-select v-model="customForm.state" placeholder="请选择状态" notfound="无法找到" :data="selectDic"></v-select>
         </v-form-item>
         <v-form-item label="权限" :label-col="labelCol" :wrapper-col="wrapperCol" prop="power">
-<!--          <v-input size="large" v-model="customForm.power"></v-input>-->
-          <v-select v-model="customForm.power" placeholder="请选择管理员" notfound="无法找到" :data="[{value: '1', label: '区域1'}, {value: '2', label: '区域2'}]"></v-select>
+          <v-select v-model="customForm.power" placeholder="请选择管理员" notfound="无法找到" :data="powerDic"></v-select>
         </v-form-item>
-<!--        <v-form-item :wrapper-col="{offset:6, span: 14 }">-->
-<!--          <v-button type="primary" style="margin-right:10px" @click.prevent="submitForm('customRuleForm')">提交</v-button>-->
-<!--          <v-button type="ghost" @click.prevent="resetForm('customRuleForm')">重置</v-button>-->
-<!--        </v-form-item>-->
       </v-form>
       <div slot="footer">
         <v-button key="cancel" type="ghost" size="large" @click="customFooterCancel('customRuleForm')">
@@ -77,34 +84,31 @@ import axios from 'axios'
 
 export default {
   name: 'Account',
+  created () {
+    let itself = this
+    axios.get('/role.json').then(res => {
+      let powerDics = []
+      for (let index in res.data.result){
+        powerDics.push({
+          value: res.data.result[index].id,
+          label: res.data.result[index].role
+        })
+      }
+      itself.powerDic = powerDics;
+    })
+  },
   data: function () {
     let validateAccount = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('请输入账号'));
       } else {
-        if (this.customForm.account !== '') {
-          // this.$refs.customRuleForm.validateField('account');
-        }
         callback();
       }
     };
-    // let validatePass = (rule, value, callback) => {
-    //   if (value === '') {
-    //     callback(new Error('请输入密码'));
-    //   } else {
-    //     if (this.customForm.password !== '') {
-    //       // this.$refs.customRuleForm.validateField('password');
-    //     }
-    //     callback();
-    //   }
-    // };
     let validatePhone = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('请输入手机号'));
       } else {
-        if (this.customForm.phone !== '') {
-          // this.$refs.customRuleForm.validateField('phone');
-        }
         callback();
       }
     };
@@ -112,9 +116,6 @@ export default {
       if (value === '') {
         callback(new Error('请输入邮箱'));
       } else {
-        if (this.customForm.mailbox !== '') {
-          // this.$refs.customRuleForm.validateField('mailbox');
-        }
         callback();
       }
     };
@@ -122,9 +123,6 @@ export default {
       if (value === '') {
         callback(new Error('请选择状态'));
       } else {
-        if (this.customForm.state !== '') {
-          // this.$refs.customRuleForm.validateField('state');
-        }
         callback();
       }
     };
@@ -132,15 +130,14 @@ export default {
       if (value === '') {
         callback(new Error('请选择管理员'));
       } else {
-        if (this.customForm.power !== '') {
-          // this.$refs.customRuleForm.validateField('power');
-        }
         callback();
       }
     };
     return {
       customFooterVisible: false,
       customFooterLoading: false,
+      selectDic: [{value: 0, label: '启用'}, {value: 1, label: '停用'}],
+      powerDic: null,
       loadData(pramas) {
         return axios.get('/datatable.json',pramas).then(res =>{
           return res.data;
@@ -172,14 +169,6 @@ export default {
             validator: validateAccount
           }
         ],
-        // password: [{
-        //   required: true,
-        //   message: '请输入密码'
-        // },
-        //   {
-        //     validator: validatePass
-        //   }
-        // ],
         phone: [{
           required: true,
           message: '请输入手机号'
@@ -227,10 +216,9 @@ export default {
       this.customFooterVisible = true
       this.modelTitle = '编辑'
       this.customForm.account = obj.account
-      // this.customForm.password = obj.password
       this.customForm.phone = obj.phone
       this.customForm.mailbox = obj.mailbox
-      this.customForm.state = '1'
+      this.customForm.state = obj.state
       this.customForm.power = obj.power
     },
     customFooterOk (formName) {
