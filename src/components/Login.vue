@@ -87,8 +87,12 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          alert('submit!');
-          console.log(this.customForm);
+          if (this.customForm.username === 'admin' && this.customForm.password === 'admin'){
+            sessionStorage.setItem('token',true)
+            this.$router.push({
+              path: '/Show'
+            })
+          }
         } else {
           console.log('error submit!!');
           return false;

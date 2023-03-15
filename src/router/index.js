@@ -14,24 +14,45 @@ Vue.use(vueRouter)
 export default new vueRouter({
     routes:[{
         path:'/',
-        component:Login
+        component:Login,
+        meta: {
+            requireAuth: false
+        }
     },{
         path:'/Login',
-        component:Login
+        component:Login,
+        meta: {
+            requireAuth: false
+        }
     },{
         path:'/Show',
-        component:Show
+        component:Show,
+        meta: {
+            requireAuth: true
+        }
     },{
         path:'/Account',
-        component:Account
+        component:Account,
+        meta: {
+            requireAuth: true
+        }
     },{
         path:'/Role',
-        component:Role
+        component:Role,
+        meta: {
+            requireAuth: true
+        }
     },{
         path:'/Menu',
-        component:Menu
+        component:Menu,
+        meta: {
+            requireAuth: true
+        }
     },{
         path:'/test',
-        component:test
+        component:test,
+        meta: {
+            requireAuth: false
+        }
     }]
 })
